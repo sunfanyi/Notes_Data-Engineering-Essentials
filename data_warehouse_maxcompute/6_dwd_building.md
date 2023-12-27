@@ -183,9 +183,9 @@ SELECT  od.id
         ,callback_time payment_time
         ,sku_num
         ,split_original_amount
-        ,split_total_amount
         ,split_activity_amount
         ,split_coupon_amount
+        ,split_total_amount
         ,DATE_FORMAT(callback_time,'yyyyMMdd') ds
 FROM    (
             SELECT  order_id
@@ -251,9 +251,9 @@ SELECT  od.id
         ,callback_time payment_time
         ,sku_num
         ,split_original_amount
-        ,split_total_amount
         ,split_activity_amount
         ,split_coupon_amount
+        ,split_total_amount
         ,DATE_FORMAT(callback_time,'yyyyMMdd') ds
 FROM    (
             SELECT  order_id
@@ -376,7 +376,7 @@ ON      oi.order_id = finished.order_id
 SET odps.sql.hive.compatible = TRUE
 ;
 
--- 对于主查询里的前四个 NVL：如果payment表里昨天分区有数据，代表是新增的数据（这个时候oi表里是没有数据的，比如这个订单在昨天还没有支付），用payment表里的数据；否则用 oi 表里的历史数据
+-- 对于主查询里的前四个 NVL：如果 payment 表里 bizdate 分区有数据，代表是新增的数据（这个时候 oi 表里是没有数据的，比如这个订单在 bizdate-1 天还没有支付），用 payment 表里的数据去更新 oi 里的数据；否则用 oi 表里的历史数据，即这是一个早就被支付过的不需要更新的订单。
 INSERT OVERWRITE TABLE dwd_gmall_trade_trade_flow_order_di PARTITION (ds)
 SELECT  oi.order_id
         ,user_id
