@@ -32,7 +32,7 @@ mybatis:
    mapper-locations: classpath:mapper/*.xml
 
 #业务日期
-mock.date: "2023-12-23"
+mock.date: "2024-02-17"
 
 # 日志是否写入数据库一份  写入z_log表中
 mock.log.db.enable: 0
